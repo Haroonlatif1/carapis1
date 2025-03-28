@@ -9,7 +9,7 @@ const port = 3002;
 const jwtToken = process.env.JWT_TOKEN
 
 if (!jwtToken) {
-  console.error("❌ JWT Token is missing! Please set JWT_TOKEN in .env file.");
+  console.error("JWT Token is missing! Please set JWT_TOKEN in .env file.");
   process.exit(1);
 }
 
@@ -47,7 +47,7 @@ app.get("/api/numberplate/:state/:numberplate", async (req, res) => {
   }
 });
 
-// ✅ Bodies Data API
+// Bodies Data API
 app.get("/api/bodies", async (req, res) => {
   try {
     const page = req.query.page || 1;
@@ -84,7 +84,7 @@ app.get("/api/bodies", async (req, res) => {
   }
 });
 
-// ✅ سرور اسٹارٹ کرو
+
 app.listen(port, () => {
-  console.log(`🚀 Server listening on port ${port}`);
+  console.log(`Server listening on port ${port}`);
 });
