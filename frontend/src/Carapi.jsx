@@ -17,7 +17,7 @@ setNumberPlate(event.target.value);
 
 const handleGetData = async () => {
 try {
-const response = await fetch(`http://localhost:3002/api/numberplate/${state}/${numberPlate}`);
+const response = await fetch(`${import.meta.BACKEND_URL}/${state}/${numberPlate}`);
 const data = await response.json();
 setCar(data);
 setError(null);

@@ -81,7 +81,7 @@ function App() {
                 )}
               </div>
               {selectedMake && (
-                <div style={{ marginTop: '150px' }}>
+                <div style={{ marginTop: '100px' }}>
                   <h3>Selected Make: {selectedMake}</h3>
                   {data.map((car) => (
                     <div key={car.make + car.model}>
