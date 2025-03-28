@@ -1,4 +1,3 @@
-// require("dotenv").config(); // ✅ Load environment variables
 const express = require("express");
 const axios = require("axios");
 
@@ -6,7 +5,7 @@ const app = express();
 const port = 3002;
 
 // ✅ Load JWT Token from .env
-const jwtToken = ``
+const jwtToken = `${import.meta.JWT_TOKEN}`
 
 if (!jwtToken) {
   console.error("❌ JWT Token is missing! Please set JWT_TOKEN in .env file.");
