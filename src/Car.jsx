@@ -12,7 +12,7 @@ const Car = () => {
 
   const handleGetData = async () => {
     try {
-      const response = await fetch(`http://localhost:3002/api/car/${id}`);
+      const response = await fetch(`https://www.freetestapi.com/api/v1/cars/${id}`);
       const data = await response.json();
       setCar(data);
       setError(null);

@@ -2,7 +2,7 @@ const express = require("express");
 const axios = require("axios");
 
 const app = express();
-const port = 3001;
+const port = 3002;
 
 // ✅ Hardcoded JWT Token (جو تم نے دیا تھا)
 const jwtToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjYXJhcGkuYXBwIiwic3ViIjoiNmJlMjE5ZTEtOWE1ZC00NDYwLTkyOWYtNzNkYWU5ZDM2MGVmIiwiYXVkIjoiNmJlMjE5ZTEtOWE1ZC00NDYwLTkyOWYtNzNkYWU5ZDM2MGVmIiwiZXhwIjoxNzQzNzA4NTUyLCJpYXQiOjE3NDMxMDM3NTIsImp0aSI6ImFkOGJjMzBhLTliNDEtNGU3My1iOWU4LTY5Y2QxNjhlYjE5ZCIsInVzZXIiOnsic3Vic2NyaXB0aW9ucyI6W10sInJhdGVfbGltaXRfdHlwZSI6ImhhcmQiLCJhZGRvbnMiOnsiYW50aXF1ZV92ZWhpY2xlcyI6ZmFsc2UsImRhdGFfZmVlZCI6ZmFsc2V9fX0.VemKPKbieDsrv77WYdsfgTEpCVceiDc9qFXaHJfCkXc";
