@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Car from "./Car";
-import Bodies from "./bodies";
+import Car from "./Freeapi";
+import Bodies from "./Carapi";
 
 const Dashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
