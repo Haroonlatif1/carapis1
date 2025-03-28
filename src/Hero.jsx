@@ -1,147 +1,122 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Car from "./Car";
 import Bodies from "./bodies";
 
 const Dashboard = () => {
-  const [showCarComponent, setShowCarComponent] = useState(false);
-  const [showBodiesComponent, setShowBodiesComponent] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleNavbar = () => setIsOpen(!isOpen);
 
-  const handleSearchVehicleClick = () => {
-    setShowCarComponent(true);
-    setShowBodiesComponent(false);
+  const onHandler = () => {
+    alert("No content right now, stay tuned");
   };
-
-  const handleBodiesClick = () => {
-    setShowBodiesComponent(true);
-    setShowCarComponent(false);
-  };
-  const onhandler=()=>{
-    alert("No content right now stay tuned")
-  }
 
   return (
-    <div className="container-fluid">
-      <div className="row">
-        {/* Sidebar */}
-        <div
-          className="col-md-2 bg-dark text-white d-none d-md-block position-fixed min-vh-100"
-          style={{ top: 0, left: 0, paddingTop: "20px" }}
-        >
-          <nav className="navbar navbar-dark">
-            <ul className="navbar-nav flex-column w-100">
-              <li className="nav-item">
-                <a
-                  className="nav-link active"
-                  onClick={handleSearchVehicleClick}
-                  style={{ cursor: "pointer" }}
-                >
-Search Vehicle Freetest Api                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link"
-                  onClick={handleBodiesClick}
-                  style={{ cursor: "pointer" }}
-                >
-Search Vehicle CarApi                 </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#" onClick={onhandler}>
-                    
-                  Vehicle Reports
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#"  onClick={onhandler}>
-                  Maintenance Records
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#"  onClick={onhandler}>
-                  Customer Support
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#"  onClick={onhandler}>
-                  Settings
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
+    <Router>
+      <div className="container-fluid">
+        <div className="row">
+          {/* Sidebar for larger screens */}
+          <div
+            className="col-md-2 bg-dark text-white d-none d-md-block position-fixed min-vh-100"
+            style={{ top: 0, left: 0, paddingTop: "20px" }}
+          >
+            <nav className="navbar navbar-dark">
+              <ul className="navbar-nav flex-column w-100">
+                <li className="nav-item">
+                  <Link className="nav-link active" to="/car">
+                    Search Vehicle Freetest Api
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/bodies">
+                    Search Vehicle CarApi
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#" onClick={onHandler}>
+                    Vehicle Reports
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#" onClick={onHandler}>
+                    Maintenance Records
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#" onClick={onHandler}>
+                    Customer Support
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#" onClick={onHandler}>
+                    Settings
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
 
-        {/* Main content area */}
-        <div className="col-md-10 offset-md-2">
-          {/* Top Navbar */}
-          <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+          {/* Top Navbar for mobile */}
+          <nav className="navbar navbar-expand-md navbar-dark bg-dark d-md-none w-100">
             <div className="container-fluid">
-              <a className="navbar-brand" href="#">
-                Vehicle Dashboard
-              </a>
+              <a className="navbar-brand" href="#">Vehicle Dashboard</a>
               <button
                 className="navbar-toggler"
                 type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#sidebarMenu"
+                onClick={toggleNavbar}
               >
                 <span className="navbar-toggler-icon"></span>
               </button>
+              <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`}>
+                <ul className="navbar-nav">
+                  <li className="nav-item">
+                    <Link className="nav-link active" to="/car" onClick={toggleNavbar}>
+                      Search Vehicle Freetest Api
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/bodies" onClick={toggleNavbar}>
+                      Search Vehicle CarApi
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="#" onClick={onHandler}>
+                      Vehicle Reports
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="#" onClick={onHandler}>
+                      Maintenance Records
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="#" onClick={onHandler}>
+                      Customer Support
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="#" onClick={onHandler}>
+                      Settings
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </nav>
 
-          {/* Sidebar for smaller screens */}
-          <div className="collapse d-md-none bg-dark p-3" id="sidebarMenu">
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <a
-                  className="nav-link active"
-                  onClick={handleSearchVehicleClick}
-                  style={{ cursor: "pointer" }}
-                >
-                  Search Vehicle Freetest Api
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link"
-                  onClick={handleBodiesClick}
-                  style={{ cursor: "pointer" }}
-                > Search Vehicle CarApi
-
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Vehicle Reports
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Maintenance Records
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Customer Support
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Settings
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Render components based on selection */}
-          <div className="p-3">
-            {showCarComponent && <Car />}
-            {showBodiesComponent && <Bodies />}
+          {/* Main content area */}
+          <div className="col-md-10 offset-md-2">
+            <div className="p-3">
+              <Routes>
+                <Route path="/car" element={<Car />} />
+                <Route path="/bodies" element={<Bodies />} />
+              </Routes>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Router>
   );
 };
 
