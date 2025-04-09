@@ -42,15 +42,7 @@ const Dashboard = () => {
           >
             <nav className="navbar navbar-dark">
               <ul className="navbar-nav flex-column w-100">
-                <li className="nav-item">
-                  <Link
-                    className="nav-link"
-                    to="/car"
-                    onClick={handleSearchVehicleClick}
-                  >
-                    Search Vehicle Freetest Api
-                  </Link>
-                </li>
+                
                 <li className="nav-item">
                   <Link
                     className="nav-link"
