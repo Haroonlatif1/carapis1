@@ -4,84 +4,108 @@ const axios = require("axios");
 const app = express();
 const port = 3001;
 
-// ✅ Hardcoded JWT Token (جو تم نے دیا تھا)
-const jwtToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjYXJhcGkuYXBwIiwic3ViIjoiNmJlMjE5ZTEtOWE1ZC00NDYwLTkyOWYtNzNkYWU5ZDM2MGVmIiwiYXVkIjoiNmJlMjE5ZTEtOWE1ZC00NDYwLTkyOWYtNzNkYWU5ZDM2MGVmIiwiZXhwIjoxNzQzNzA4NTUyLCJpYXQiOjE3NDMxMDM3NTIsImp0aSI6ImFkOGJjMzBhLTliNDEtNGU3My1iOWU4LTY5Y2QxNjhlYjE5ZCIsInVzZXIiOnsic3Vic2NyaXB0aW9ucyI6W10sInJhdGVfbGltaXRfdHlwZSI6ImhhcmQiLCJhZGRvbnMiOnsiYW50aXF1ZV92ZWhpY2xlcyI6ZmFsc2UsImRhdGFfZmVlZCI6ZmFsc2V9fX0.VemKPKbieDsrv77WYdsfgTEpCVceiDc9qFXaHJfCkXc";
+const jwtToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjYXJhcGkuYXBwIiwic3ViIjoiYWQ1N2MyNmMtNWRiZC00ZDU3LWFjMDItZGE3YWJkZTFhZjZjIiwiYXVkIjoiYWQ1N2MyNmMtNWRiZC00ZDU3LWFjMDItZGE3YWJkZTFhZjZjIiwiZXhwIjoxNzQ0ODIyNDIzLCJpYXQiOjE3NDQyMTc2MjMsImp0aSI6Ijk3NjRkMTBiLTFiOGItNDY5Ni04ODkxLTRiNmZmMzdhM2UxYSIsInVzZXIiOnsic3Vic2NyaXB0aW9ucyI6WyJzdGFydGVyIl0sInJhdGVfbGltaXRfdHlwZSI6ImhhcmQiLCJhZGRvbnMiOnsiYW50aXF1ZV92ZWhpY2xlcyI6ZmFsc2UsImRhdGFfZmVlZCI6ZmFsc2V9fX0.p9KbI3JS2GKeY40YmYGWNI3pe2cBf4ZfcwUMjDbORug";
 
-// ✅ CORS Middleware (اگر فرنٹ اینڈ React/Angular/Vue سے کال کر رہے ہو)
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
-// ✅ نمبر پلیٹ ڈیٹا حاصل کرنے کا API
-app.get("/api/numberplate/:state/:numberplate", async (req, res) => {
+// License Plate Lookup API
+app.get("/api/license-plate", async (req, res) => {
   try {
-    const { state, numberplate } = req.params;
+    const { country_code, lookup, region } = req.query;
 
-    // ✅ چیک کرو کہ state اور numberplate دی گئی ہے یا نہیں
-    if (!state || !numberplate) {
-      return res.status(400).json({ message: "State and Number Plate are required." });
+    if (!country_code || !lookup) {
+      return res.status(400).json({ 
+        message: "country_code and lookup parameters are required" 
+      });
     }
 
-    console.log(`Fetching data for number plate: ${numberplate} in state: ${state}`);
+    // Validate country code (basic check)
+    const validCountryCodes = ['US', 'CA', 'AU', 'UK', 'FR', 'IE', 'NZ', 'MX', 'DE', 'CZ', 'PT'];
+    if (!validCountryCodes.includes(country_code.toUpperCase())) {
+      return res.status(400).json({ 
+        message: "Invalid country_code. Supported codes: US, CA, AU, UK, FR, IE, NZ, MX, DE, CZ, PT" 
+      });
+    }
+
+    // Check if region is required for certain countries
+    if (['US', 'CA', 'AU'].includes(country_code.toUpperCase()) && !region) {
+      return res.status(400).json({ 
+        message: "region parameter is required for US, CA, and AU country codes" 
+      });
+    }
+
+    console.log(`Fetching data for license plate: ${lookup} in country: ${country_code}${region ? `, region: ${region}` : ''}`);
+
+    // Build query parameters
+    const params = new URLSearchParams();
+    params.append('country_code', country_code);
+    params.append('lookup', lookup);
+    if (region) params.append('region', region);
 
     const response = await axios.get(
-      `https://carapi.app/api/license-plate?country_code=US&region=${state}&lookup=${numberplate}`,
-      { headers: { Authorization: `Bearer ${jwtToken}`, Accept: "application/json" } }
+      `https://carapi.app/api/license-plate?${params.toString()}`,
+      { 
+        headers: { 
+          Authorization: `Bearer ${jwtToken}`, 
+          Accept: "application/json" 
+        } 
+      }
     );
 
     res.json(response.data);
   } catch (error) {
-    console.error("Error fetching number plate data:", error.response ? error.response.data : error.message);
+    console.error("Error fetching license plate data:", error.response ? error.response.data : error.message);
 
-    res.status(error.response?.status || 500).json({
-      message: "Error fetching number plate data",
+    const statusCode = error.response?.status || 500;
+    res.status(statusCode).json({
+      message: "Error fetching license plate data",
       error: error.response?.data || error.message,
     });
   }
 });
 
 // ✅ Bodies Data API
-// ✅ Bodies Data API
 app.get("/api/bodies", async (req, res) => {
-    try {
-      const page = req.query.page || 1; // Optional page parameter
-      const limit = 5; // Number of records per page
-      const offset = (page - 1) * limit; // Calculate offset for pagination
-  
-      console.log(`Fetching bodies data from page: ${page}`);
-  
-      const response = await axios.get(
-        `https://carapi.app/api/bodies`,
-        { headers: { Authorization: `Bearer ${jwtToken}`, Accept: "application/json" } }
-      );
-  
-      const data = response.data.data; // Access the data array
-  
-      if (!Array.isArray(data)) {
-        throw new Error("Expected data to be an array");
-      }
-  
-      const paginatedData = data.slice(offset, offset + limit); // Paginate data
-  
-      res.json({
-        data: paginatedData,
-        collection: {
-          pages: Math.ceil(data.length / limit), // Calculate total pages
-        },
-      });
-    } catch (error) {
-      console.error("Error fetching bodies data:", error.response ? error.response.data : error.message);
-  
-      res.status(error.response?.status || 500).json({
-        message: "Error fetching bodies data",
-        error: error.response?.data || error.message,
-      });
-    }
-  });
+  try {
+    const page = req.query.page || 1; 
+    const limit = 5; 
+    const offset = (page - 1) * limit; 
 
-// ✅ سرور اسٹارٹ کرو
+    console.log(`Fetching bodies data from page: ${page}`);
+
+    const response = await axios.get(
+      `https://carapi.app/api/bodies`,
+      { headers: { Authorization: `Bearer ${jwtToken}`, Accept: "application/json" } }
+    );
+
+    const data = response.data.data; // Access the data array
+
+    if (!Array.isArray(data)) {
+      throw new Error("Expected data to be an array");
+    }
+
+    const paginatedData = data.slice(offset, offset + limit); // Paginate data
+
+    res.json({
+      data: paginatedData,
+      collection: {
+        pages: Math.ceil(data.length / limit), // Calculate total pages
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching bodies data:", error.response ? error.response.data : error.message);
+
+    res.status(error.response?.status || 500).json({
+      message: "Error fetching bodies data",
+      error: error.response?.data || error.message,
+    });
+  }
+});
+
 app.listen(port, () => {
   console.log(`🚀 Server listening on port ${port}`);
 });
