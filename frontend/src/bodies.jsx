@@ -34,7 +34,7 @@ const LicensePlateLookup = () => {
         params.append('region', region);
       }
   
-      const response = await axios.get(`http://localhost:3001/api/license-plate?${params.toString()}`);
+      const response = await axios.get(`https://carapis1-production-f421.up.railway.app/api/license-plate?${params.toString()}`);
       setVehicle(response.data);
       setError(null);
     } catch (error) {
